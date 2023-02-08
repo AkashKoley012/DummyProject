@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container" style="flex-direction: row">
+      <form class="example" method="post" action="/api/show">
+        <input type="text" placeholder="Search.." name="search" />
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+      <select name="limit" id="limit" onchange="selectRow()">
+        <% for(var i=0; i < 10; i++) { %>
+        <option value="/api/show?limit=<%= i+1 %>&offset=<%= offset %>" <% if(i+1 == limit){ %> selected <% } %> ><%= i+1 %></option>
+        <% } %>
+      </select>
+      <a href="/api/add" class="button button2">Add User</a>
+    </div>
+    <div class="flex-wrap">
+      <% for(var i=0; i < result.length; i++) { %>
+      <div class="card">
+        <img
+          src="/images/img_avatar<%= Math.floor(Math.random() * 2) + 1 %>.png"
+          alt="Avatar"
+        />
+        <div class="container">
+          <h4><b><%= result[i].userId %>.<%= result[i].name %></b></h4>
+          <p>Email: <%= result[i].email %></p>
+          <p>Phone: <%= result[i].phone %></p>
+          <p>Password: <%= result[i].password %></p>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <div class="pagination" id="pagination">
+      <a href="#">&laquo;</a>
+      <% for(var i=0; i < 7; i++) { %>
+      <a
+        href="/api/show?limit=<%= limit %>&offset=<%= i+1 %>"
+        class="<% if(i+1 == offset){ %> active <% } %>"
+        ><%= i + 1 %></a
+      >
+      <% } %>
+      <a href="#">&raquo;</a>
+    </div>
+    <script src="/javascript/index.js"></script>
+  </body>
+</html>
