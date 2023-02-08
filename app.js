@@ -4,8 +4,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 
-const mysql = require("mysql");
-const connection = require("./lib/db");
+const db = require("./lib/db");
 
 const indexRoute = require("./routes/index");
 
@@ -24,6 +23,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/", (req, res) => {
+  var limit = Number(req.query.limit ? req.query.limit : 3);
+  var offset = Number(req.query.offset ? req.query.offset : 1);
+  db.query("SELECT * FROM Users", (err, result) => {
+    if (err) return res.status(400).json({ error: { message: err.message } });
+    return res
+      .status(200)
+      .render("show", { result: result, offset: offset, limit: limit });
+  });
+});
 app.use("/api/", indexRoute);
 
 // todo not found routes
